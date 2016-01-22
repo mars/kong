@@ -209,8 +209,12 @@ build = {
 
     ["kong.plugins.datadog.handler"] = "kong/plugins/datadog/handler.lua",
     ["kong.plugins.datadog.schema"] = "kong/plugins/datadog/schema.lua",
-    ["kong.plugins.datadog.statsd_logger"] = "kong/plugins/datadog/statsd_logger.lua"
+    ["kong.plugins.datadog.statsd_logger"] = "kong/plugins/datadog/statsd_logger.lua",
 
+    ["kong.plugins.ldap.handler"] = "kong/plugins/ldap/handler.lua",
+    ["kong.plugins.ldap.schema"] = "kong/plugins/ldap/schema.lua",
+    ["kong.plugins.ldap.access"] = "kong/plugins/ldap/access.lua"
+    
   },
   install = {
     conf = { "kong.yml" },
