@@ -31,7 +31,8 @@ dependencies = {
   "lrexlib-pcre ~> 2.7.2-1",
   "lua-llthreads2 ~> 0.1.3-1",
   "luacrypto >= 0.3.2-1",
-  "luasyslog >= 1.0.0-2"
+  "luasyslog >= 1.0.0-2",
+  "lualdap >= 1.2.3-1"
 }
 build = {
   type = "builtin",

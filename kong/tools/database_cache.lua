@@ -100,6 +100,10 @@ function _M.ssl_data(api_id)
   return CACHE_KEYS.SSL.."/"..api_id
 end
 
+function _M.ldap_credential_key(username)
+  return CACHE_KEYS.LDAP_CREDENTIAL.."/"..username
+end
+
 function _M.get_or_set(key, cb, exptime)
   local value, err
   -- Try to get
