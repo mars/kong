@@ -56,6 +56,12 @@ end
 function BaseService:is_running()
   local result = false
 
+  -- When an external process supervisor is used, we
+  -- can be certain that the service is already running.
+  if os.getenv('KONG_EXTERNAL_SUPERVISE') then
+    return true
+  end
+
   local pid = IO.read_file(self._pid_file_path)
   if pid then
     local _, code = IO.os_execute("kill -0 "..stringy.strip(pid))
