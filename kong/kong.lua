@@ -36,9 +36,8 @@ local table_insert = table.insert
 local table_sort = table.sort
 
 local loaded_plugins = {}
--- @TODO make those locals too
--- local configuration
--- local dao_factory
+local configuration
+local dao_factory
 
 --- Attach a hooks table to the event bus
 local function attach_hooks(events, hooks)
