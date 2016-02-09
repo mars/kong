@@ -23,8 +23,6 @@
 -- ==========
 -- |[[    ]]|
 -- ==========
-local S = require "serpent"
-
 local core = require "kong.core.handler"
 local utils = require "kong.tools.utils"
 local dao_loader = require "kong.tools.dao_loader"
