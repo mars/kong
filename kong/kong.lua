@@ -23,6 +23,7 @@
 -- ==========
 -- |[[    ]]|
 -- ==========
+local S = require "serpent"
 
 local core = require "kong.core.handler"
 local utils = require "kong.tools.utils"
@@ -36,8 +37,9 @@ local table_insert = table.insert
 local table_sort = table.sort
 
 local loaded_plugins = {}
-local configuration
-local dao_factory
+-- @TODO make those locals too
+-- local configuration
+-- local dao_factory
 
 --- Attach a hooks table to the event bus
 local function attach_hooks(events, hooks)
@@ -125,6 +127,9 @@ function Kong.init()
       dao = dao_loader.load(configuration, true, events)
       loaded_plugins = load_node_plugins(configuration)
 
+      ngx.log(ngx.DEBUG, "Kong.init configuration: "..S.block(configuration))
+      ngx.log(ngx.DEBUG, "Kong.init dao: "..S.block(dao))
+
       -- Attach core hooks
       attach_hooks(events, require("kong.core.hooks"))
 
@@ -155,6 +160,9 @@ function Kong.init()
 end
 
 function Kong.init_worker()
+  ngx.log(ngx.DEBUG, "Kong.init_worker configuration: "..S.block(configuration))
+  ngx.log(ngx.DEBUG, "Kong.init_worker dao: "..S.block(dao))
+  
   core.init_worker.before()
 
   for _, plugin in ipairs(loaded_plugins) do
