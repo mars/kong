@@ -144,10 +144,16 @@ function Kong.init()
 end
 
 function Kong.init_worker()
-  core.init_worker.before()
+  local status, err = pcall(function() 
+    core.init_worker.before()
 
-  for _, plugin in ipairs(loaded_plugins) do
-    plugin.handler:init_worker()
+    for _, plugin in ipairs(loaded_plugins) do
+      plugin.handler:init_worker()
+    end
+  end)
+  if not status then
+    ngx.log(ngx.ERR, "Init worker error: "..err)
+    os.exit(1)
   end
 end
 
