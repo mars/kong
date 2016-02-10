@@ -103,6 +103,16 @@ local function load_node_plugins(configuration)
   return sorted_plugins
 end
 
+-- Define new globals (_G) for each process:
+--   * Nginx master
+--   * Nginx worker(s)
+local function define_globals()
+  configuration = config_loader.load(os.getenv("KONG_CONF"))
+  events = Events()
+  dao = dao_loader.load(configuration, true, events)
+  loaded_plugins = load_node_plugins(configuration)
+end
+
 --- Kong public context handlers.
 -- @section kong_handlers
 
@@ -121,10 +131,7 @@ local Kong = {}
 -- it return an nginx error and exit.
 function Kong.init()
   local status, err = pcall(function() 
-      configuration = config_loader.load(os.getenv("KONG_CONF"))
-      events = Events()
-      dao = dao_loader.load(configuration, true, events)
-      loaded_plugins = load_node_plugins(configuration)
+      define_globals()
 
       -- Attach core hooks
       attach_hooks(events, require("kong.core.hooks"))
@@ -144,6 +151,8 @@ function Kong.init()
 end
 
 function Kong.init_worker()
+  define_globals()
+
   core.init_worker.before()
 
   for _, plugin in ipairs(loaded_plugins) do
