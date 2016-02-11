@@ -1,9 +1,9 @@
 package = "kong"
-version = "0.6.0-1"
+version = "0.6.1-0"
 supported_platforms = {"linux", "macosx"}
 source = {
   url = "git://github.com/Mashape/kong",
-  tag = "0.6.0"
+  tag = "0.6.1"
 }
 description = {
   summary = "Kong is a scalable and customizable API Management Layer built on top of Nginx.",
@@ -19,7 +19,7 @@ dependencies = {
   "yaml ~> 1.1.2-1",
   "lapis ~> 1.3.1-1",
   "stringy ~> 0.4-1",
-  "lua-cassandra ~> 0.4.2-0",
+  "lua-cassandra ~> 0.5.0",
   "multipart ~> 0.2-1",
   "lua-path ~> 0.2.3-1",
   "lua-cjson ~> 2.1.0-1",
@@ -41,10 +41,10 @@ build = {
 
     ["classic"] = "kong/vendor/classic.lua",
     ["lapp"] = "kong/vendor/lapp.lua",
-    ["ngx.ssl"] = "kong/vendor/ssl.lua",
     ["resty_http"] = "kong/vendor/resty_http.lua",
 
     ["kong.constants"] = "kong/constants.lua",
+    ["kong.singletons"] = "kong/singletons.lua",
 
     ["kong.cli.utils.logger"] = "kong/cli/utils/logger.lua",
     ["kong.cli.utils.luarocks"] = "kong/cli/utils/luarocks.lua",
@@ -90,6 +90,7 @@ build = {
     ["kong.core.reports"] = "kong/core/reports.lua",
     ["kong.core.cluster"] = "kong/core/cluster.lua",
     ["kong.core.events"] = "kong/core/events.lua",
+    ["kong.core.error_handlers"] = "kong/core/error_handlers.lua",
 
     ["kong.dao.cassandra.schema.migrations"] = "kong/dao/cassandra/schema/migrations.lua",
     ["kong.dao.error"] = "kong/dao/error.lua",
@@ -192,7 +193,6 @@ build = {
 
     ["kong.plugins.ssl.handler"] = "kong/plugins/ssl/handler.lua",
     ["kong.plugins.ssl.hooks"] = "kong/plugins/ssl/hooks.lua",
-    ["kong.plugins.ssl.ssl_util"] = "kong/plugins/ssl/ssl_util.lua",
     ["kong.plugins.ssl.schema"] = "kong/plugins/ssl/schema.lua",
 
     ["kong.plugins.ip-restriction.handler"] = "kong/plugins/ip-restriction/handler.lua",
