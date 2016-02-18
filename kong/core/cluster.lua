@@ -3,6 +3,10 @@ local Serf = require "kong.cli.services.serf"
 local cache = require "kong.tools.database_cache"
 local cjson = require "cjson"
 
+local dao_loader = require "kong.tools.dao_loader"
+local config_loader = require "kong.tools.config_loader"
+local Events = require "kong.core.events"
+
 local resty_lock
 local status, res = pcall(require, "resty.lock")
 if status then
@@ -14,7 +18,14 @@ local ASYNC_AUTOJOIN_INTERVAL = 3
 local ASYNC_AUTOJOIN_RETRIES = 20 -- Try for max a minute (3s * 20)
 
 local function create_timer(at, cb)
-  local ok, err = ngx.timer.at(at, cb)
+  local ok, err = ngx.timer.at(at, function()
+    -- Setup DAO within context of `ngx.timer` to avoid 
+    -- `init_worker_by_lua` co-socket limitations.
+    configuration = config_loader.load(os.getenv("KONG_CONF"))
+    events = Events()
+    dao = dao_loader.load(configuration, true, events)
+    cb()
+  end)
   if not ok then
     ngx.log(ngx.ERR, "[cluster] failed to create timer: ", err)
   end
