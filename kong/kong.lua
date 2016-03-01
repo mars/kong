@@ -142,6 +142,26 @@ function Kong.init()
         reports.enable()
       end
 
+      -- When an external process supervisor is used, we
+      -- must complete service start-up here
+      if os.getenv('KONG_EXTERNAL_SUPERVISE') then
+        local node_name = os.getenv('SERF_NODE_NAME')
+        if not node_name then
+          error("Cannot autojoin cluster: SERF_NODE_NAME must be set when using KONG_EXTERNAL_SUPERVISE")
+        end
+        local Serf = require "kong.cli.services.serf"
+        local serf = Serf(configuration)
+
+        -- Auto-Join nodes
+        local ok, err = serf:_autojoin(node_name)
+        if not ok then
+          return nil, err
+        end
+  
+        -- Adding node to nodes table
+        serf:_add_node()
+      end
+
       ngx.update_time()
     end)
   if not status then
