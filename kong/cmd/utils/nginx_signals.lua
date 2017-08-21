@@ -70,6 +70,8 @@ local function find_nginx_bin()
 end
 
 function _M.start(kong_conf)
+  table.insert(nginx_search_paths, kong_conf.prefix .. "/nginx/sbin")
+
   local nginx_bin, err = find_nginx_bin()
   if not nginx_bin then
     return nil, err
